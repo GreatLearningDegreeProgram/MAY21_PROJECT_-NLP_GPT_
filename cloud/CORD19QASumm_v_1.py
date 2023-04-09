@@ -90,7 +90,7 @@ col_names = [
     'raw_bibliography'
 ]
 #data = pd.DataFrame(cleaned_files, columns=col_names)
-data = pd.read_csv('json2csv.csv')
+data = pd.read_csv('cloud/json2csv.csv')
 
 print('created json2csv ')
 
