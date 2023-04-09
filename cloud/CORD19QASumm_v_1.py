@@ -70,7 +70,7 @@ imagename2 = Image.open('cloud/images/Sidebar2.jpg')
 st.sidebar.image(imagename2)
 st.sidebar.title('Settings')
 modelSelected = st.sidebar.selectbox('Choose Reader Model',options=('deepset/roberta-base-squad2-covid','deepset/roberta-base-squad2','deepset/covid_bert_base'))
-imagename = Image.open('images/caronavirus banner.jpg')
+imagename = Image.open('cloud/images/caronavirus banner.jpg')
 st.image(imagename)
 st.text_input("Your Query", key="input_text",value='')
 
