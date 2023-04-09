@@ -66,7 +66,7 @@ with warnings.catch_warnings():
     warnings.filterwarnings("ignore")
 
 
-imagename2 = Image.open('images/Sidebar2.jpg')
+imagename2 = Image.open('cloud/images/Sidebar2.jpg')
 st.sidebar.image(imagename2)
 st.sidebar.title('Settings')
 modelSelected = st.sidebar.selectbox('Choose Reader Model',options=('deepset/roberta-base-squad2-covid','deepset/roberta-base-squad2','deepset/covid_bert_base'))
