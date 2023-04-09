@@ -94,7 +94,7 @@ data = pd.read_csv('cloud/json2csv.csv')
 
 print('created json2csv ')
 
-text_file_path = 'text_file'
+text_file_path = 'cloud/text_file'
 abstract_file_path = 'abstract_file'
 bert_file_summary_path = 'summary_file/BERT'
 gpt_file_summary_path = 'summary_file/GPT'
