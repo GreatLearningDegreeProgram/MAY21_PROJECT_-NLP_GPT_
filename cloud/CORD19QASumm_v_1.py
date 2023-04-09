@@ -1,32 +1,32 @@
 
 import io
-import os
-import re
+#import os
+#import re
 import json
 import time
 import math
-import spacy
-from spacy import displacy
-import zipfile
-import logging
+#import spacy
+#from spacy import displacy
+#import zipfile
+#import logging
 import requests
-import openai
+#import openai
 import rouge
-import nltk
+#import nltk
 import numpy as np
 import pandas as pd
-import altair as alt
+#import altair as alt
 from PIL import Image
 import streamlit as st
-from pprint import pprint
+#from pprint import pprint
 from nltk.corpus import stopwords
-from copy import deepcopy
-from tqdm.notebook import tqdm
-from streamlit_chat import message
+#from copy import deepcopy
+#from tqdm.notebook import tqdm
+#from streamlit_chat import message
 import seaborn as sns
 import matplotlib.pyplot as plt
 import re, os, string, random, requests
-from subprocess import Popen, PIPE, STDOUT
+#from subprocess import Popen, PIPE, STDOUT
 from haystack.nodes import EmbeddingRetriever
 from haystack.utils import clean_wiki_text
 from haystack.utils import convert_files_to_docs
@@ -55,8 +55,6 @@ GPT2_MAX_TOKEN = 1024
 import warnings
 warnings.filterwarnings('ignore')
 
-bert_model = Summarizer() 
-GPT2_model = TransformerSummarizer(transformer_type="GPT2",transformer_model_key="gpt2-medium")
 
 # Stopword = stopwords.words('english') 
 # Stopword.extend(new_stopwords)
@@ -66,8 +64,7 @@ st.set_page_config(layout="wide")
 import warnings
 with warnings.catch_warnings():
     warnings.filterwarnings("ignore")
-logging.basicConfig(format="%(levelname)s - %(name)s -  %(message)s", level=logging.WARNING)
-logging.getLogger("haystack").setLevel(logging.INFO)
+
 
 imagename2 = Image.open('images/Sidebar2.jpg')
 st.sidebar.image(imagename2)
@@ -77,7 +74,7 @@ imagename = Image.open('images/caronavirus banner.jpg')
 st.image(imagename)
 st.text_input("Your Query", key="input_text",value='')
 
-#st.session_state.input_text = ''
+
 user_message = st.session_state.input_text
 
 
@@ -95,6 +92,8 @@ col_names = [
 #data = pd.DataFrame(cleaned_files, columns=col_names)
 data = pd.read_csv('json2csv.csv')
 
+print('created json2csv ')
+
 text_file_path = 'text_file'
 abstract_file_path = 'abstract_file'
 bert_file_summary_path = 'summary_file/BERT'
@@ -109,64 +108,10 @@ retriever = BM25Retriever(document_store=document_store)
 reader = FARMReader(model_name_or_path=modelSelected, use_gpu=True)
 pipe = ExtractiveQAPipeline(reader, retriever)
 
-# def getTextSummarization(filecount,summarizationFor,std_text,max_abstract_token_size,max_sent_size):
-#     if summarizationFor == 'std':
-#         return data[data['paper_id'] == id[filecount].replace('.txt','')]['abstract'].values[0]
-#     if summarizationFor == 'BERT':
-#         header =[]
-#         berttext = []
-#         para = []
-#         bert_model = Summarizer() 
-#         print('tot_words_ref =',tot_words_ref,'BERT_MAX_TOKEN=',BERT_MAX_TOKEN)
-#         if tot_words_ref > BERT_MAX_TOKEN:
-#             for line in std_text:
-#                 if len(line) > 1:
-#                     if len(line) < 100:
-#                         header.append(line)
-#                     else:
-#                         para.append(line)                  
-#             for parabody in para:
-#                 berttext.append(bert_model(body=parabody,max_length=100))
-#             berttext = bert_model(body=parabody,max_length=max_abstract_token_size,num_sentences=max_sent_size)
-#             bert_summary = ''.join( lines for lines in berttext) 
-#         else:
-#             for line in std_text:
-#                 para.append(line) 
-#             berttext = ''.join( lines for lines in para) 
-#             berttext = bert_model(body=berttext,max_length=max_abstract_token_size,num_sentences=max_sent_size)
-#             bert_summary = ''.join( lines for lines in berttext) 
-              
-#         return bert_summary
-        
-#     if summarizationFor == 'GPT2':            
 
-#         header =[]
-#         para = []
-#         gpt2text = []
-            
-#         print('tot_words_ref =',tot_words_ref,'BERT_MAX_TOKEN=',BERT_MAX_TOKEN)
-#         if tot_words_ref > GPT2_MAX_TOKEN:
-#             for line in std_text:
-#                 if len(line) > 1:
-#                     if len(line) < 100:
-#                         header.append(line)
-#                     else:
-#                         para.append(line)                  
-#             for parabody in para:
-#                 gpt2text.append(GPT2_model(body=parabody, max_length=100))
-                
-#             gpt2text_full = ''.join(text for text in gpt2text)
-#             gpt2text_full = GPT2_model(body=gpt2text_full, max_length=max_abstract_token_size,num_sentences=max_sent_size)
-#         else:
-#             for line in std_text:
-#                 para.append(line) 
 
-#             gpt2text = ''.join( lines for lines in para) 
-#             gpt2text = GPT2_model(body=gpt2text,max_length=max_abstract_token_size,num_sentences=max_sent_size)
-#             gpt2text_full = ''.join( lines for lines in gpt2text) 
-             
-#         return gpt2text_full
-# print('.....9')
+print('completed reader ')
+
 
 if user_message != '':
     print('inside user_meassage block')
@@ -182,7 +127,7 @@ if user_message != '':
         context.append(result.context)
         id.append(result.meta['name'])
  
-    print('.....10')
+#     print('.....10')
     responsedf = pd.DataFrame({'Probable Anwsers':ans,'Score':score,'Context':context,'Source File Name':id})
     ans = responsedf['Probable Anwsers'].values.tolist()
     ids = responsedf['Source File Name'].values.tolist()
@@ -230,22 +175,6 @@ if user_message != '':
     st.plotly_chart(fig, theme="streamlit", use_container_width=True,)
     filecount = 0
 
-    # selected_radio = st.radio('Choose File for Summarization',options=(ans[0],ans[1],ans[2],ans[3],ans[4]))
-    # file4Summ = ''
-    # filecount = 0
-    # #file4Summ = id[0]
-    # if selected_radio == ans[0]:
-    #     filecount = 0
-    # elif selected_radio == ans[1]:
-    #     filecount = 1
-    # elif selected_radio == ans[2]:
-    #     filecount = 2
-    # elif selected_radio == ans[3]:
-    #     filecount = 3
-    # else:
-    #     filecount = 4
-    
-    
     def getTextSummarization(filecount,summarizationFor,std_text,max_abstract_token_size,max_sent_size):
         if summarizationFor == 'std':
             #st.write('Calling from inside',data[data['paper_id'] == id[filecount].replace('.txt','')]['abstract'].values[0],np.nan)
@@ -255,12 +184,14 @@ if user_message != '':
             else:
                 return_text = data[data['paper_id'] == id[filecount].replace('.txt','')]['abstract'].values[0]
         elif summarizationFor == 'BERT':
+            print('BERT inside .................1')
             header =[]
             berttext = []
             para = []
-            bert_model = Summarizer() 
+            #bert_model = Summarizer() 
             print('tot_words_ref =',max_abstract_token_size,'BERT_MAX_TOKEN=',BERT_MAX_TOKEN)
             if max_abstract_token_size > BERT_MAX_TOKEN:
+                print('BERT inside .................2.1')
                 for line in std_text:
                     if len(line) > 1:
                         if len(line) < 100:
@@ -269,9 +200,10 @@ if user_message != '':
                             para.append(line)
                 for parabody in para:
                     berttext.append(bert_model(body=parabody,max_length=100))
-                    berttext = bert_model(body=parabody,max_length=max_abstract_token_size,num_sentences=max_sent_size)
+                    berttext = Summarizer(body=parabody,max_length=max_abstract_token_size,num_sentences=max_sent_size)
                     return_text = ''.join( lines for lines in berttext) 
             else:
+                print('BERT inside .................2.2')
                 for line in std_text:
                     para.append(line) 
                 berttext = ''.join( lines for lines in para) 
@@ -308,22 +240,25 @@ if user_message != '':
 
     tab1, tab2 = st.tabs(["Single Document Summarization", "Multi Document Summarization"])
 
-    mystyle = '''
-    <style>
-        p {
-            text-align: justify;
-        }
-    </style>
-    '''
-
-    st.markdown(mystyle, unsafe_allow_html=True)
+#     mystyle = '''
+#     <style>
+#         p {
+#             text-align: justify;
+#         }
+#     </style>
+#     '''
     with tab1:
+        print('inside tab1 .................')
         col1 , col2 , col3 = st.columns([1,1,1])
         col1.error('Reference Standard')
         col2.error('BERT Summarization')
         col3.error('GPT-2 Summarization')
+        
+        print('created summ header .................')
 
         gold_text = getTextSummarization(filecount,'std','',0,0) 
+        
+        print('getTextSummarization for std .................')
         while (gold_text == '' and filecount < 5):
             filecount = filecount+1
             gold_text = getTextSummarization(filecount,'std','',0,0)
@@ -336,31 +271,92 @@ if user_message != '':
         tot_words_ref = len(word_tokenize(gold_text))
         max_abstract_token_size  = math.ceil(tot_words_ref / 100) * 100
         max_sent_size = math.ceil(len(sent_tokenize(gold_text))/10)*10
-              
         full_text = data[data['paper_id'] == id[filecount].replace('.txt','')]['text'].values[0]
-        bert_summary = getTextSummarization(filecount,'BERT',full_text,tot_words_ref,max_sent_size)  
-        print('BERT :',len(bert_summary))      
-        #col2.write('Abstract : This article describes,' + bert_summary)  
+        #st.write('full_text ................len=.',len(full_text) , 'tot_words_ref = ',tot_words_ref ,'max_sent_size=',max_sent_size,'max_abstract_token_size=',max_abstract_token_size,'BERT_MAX_TOKEN=',BERT_MAX_TOKEN)
+        #bert_summary = getTextSummarization(filecount,'BERT',full_text,tot_words_ref,max_sent_size)  
+        header =[]
+        berttext = []
+        para = []
+        if max_abstract_token_size > BERT_MAX_TOKEN:    
+            for line in full_text:
+                    if len(line) > 1:
+                        if len(line) < 100:
+                            header.append(line)
+                        else:
+                            para.append(line)            
+            for parabody in para:                
+                berttext.append(bert_model(body=parabody,max_length=100))
+                st.write('tot_words_ref=',tot_words_ref)
+                st.write('max_sent_size=',max_sent_size)
+                bert_model = Summarizer()
+                berttext = bert_model(parabody,max_length=max_abstract_token_size,num_sentences=max_sent_size)
+                #return_text = ''.join( lines for lines in berttext)
+                bert_summary = ''.join( lines for lines in berttext)
+        else:
+#             st.write('else .........')
+#             print('else .........')
+            for line in full_text:
+                para.append(line) 
+            berttext = ''.join( lines for lines in para) 
+            bert_model = Summarizer('distilbert-base-uncased', hidden=[-1,-2], hidden_concat=True)
+            berttext = bert_model(berttext,max_length=max_abstract_token_size,num_sentences=max_sent_size)
+            #return_text = ''.join( lines for lines in berttext)  
+            bert_summary = ''.join( lines for lines in berttext)  
         col2.write(bert_summary)  
         
-        print('GPT filecount=',filecount)
-        gpt2text_summary = getTextSummarization(filecount,'GPT2',full_text,tot_words_ref,max_sent_size)
+#         st.write('................GPT filecount=',filecount)
+        header =[]
+        para = []
+        gpt2text = []
+#         st.write('tot_words_ref =',max_abstract_token_size,'BERT_MAX_TOKEN=',BERT_MAX_TOKEN)
+        if max_abstract_token_size > GPT2_MAX_TOKEN:  
+            st.write('inside if ...............')
+            for line in full_text:
+                if len(line) > 1:
+                    if len(line) < 100:
+                        header.append(line)
+                    else:
+                        para.append(line)                  
+            for parabody in para:
+                GPT2_model = TransformerSummarizer(transformer_type="GPT2",transformer_model_key="distilgpt2")
+#                 st.write('................GPT model created')
+                gpt2text.append(GPT2_model(body=parabody, max_length=100))                           
+                gpt2text_full = ''.join(text for text in gpt2text)
+                gpt2_summary = GPT2_model(body=gpt2text_full, max_length=max_abstract_token_size,num_sentences=max_sent_size)
+        else:
+#             st.write('inside else ...............')
+            for line in full_text:
+                para.append(line)
+#             st.write('else para len ...............',len(para))
+            print('else GPT2 para len ...............',len(para))
+            gpt2text = ''.join( lines for lines in para) 
+#             st.write('else gpt2text len ...............',len(gpt2text))
+            print('else gpt2text len ...............',len(gpt2text))
+            GPT2_model = TransformerSummarizer(transformer_type="GPT2",transformer_model_key="distilgpt2")
+            #GPT2_model = TransformerSummarizer(transformer_type="GPT2",transformer_model_key="gpt2-medium")
+#             st.write('initiated gpt2_model')
+            print('initiated gpt2_model')
+            gpt2text = GPT2_model(body=gpt2text,max_length=max_abstract_token_size,num_sentences=max_sent_size)
+            gpt2_summary = ''.join( lines for lines in gpt2text)
+#         st.write('................GPT summary')
         #col3.write('Abstract : This article describes,' + gpt2text_summary )  
-        col3.write( gpt2text_summary )  
+        col3.write( gpt2_summary )  
+        
+        
         st.markdown('----')
         st.subheader('Summarization Statistics')
-
+        
         col1 , col2, col3 = st.columns(3)
         
         tot_words_bert = len((bert_summary.split()))
-        tot_words_gpt3 = len((gpt2text_summary.split()))
+        tot_words_gpt3 = len((gpt2_summary.split()))
         col1.metric('Total Words Reference Text',tot_words_ref)
         col2.metric("Total Words BERT Summarization", tot_words_bert,(tot_words_bert - tot_words_ref))
         col3.metric("Total Words GPT-2 Summarization",tot_words_gpt3,(tot_words_gpt3 - tot_words_ref) )
 
         tot_words_ref = len(sent_tokenize(gold_text))
         tot_words_bert = len(sent_tokenize(bert_summary))
-        tot_words_gpt3 = len(sent_tokenize(gpt2text_summary))
+        tot_words_gpt3 = len(sent_tokenize(gpt2_summary))
         
         col1.metric('Total Sentences Reference Text',tot_words_ref)        
         col2.metric("Sentences in BERT Summarization", tot_words_bert,(tot_words_bert - tot_words_ref))
@@ -370,7 +366,7 @@ if user_message != '':
         st.subheader('Performance Analysis of Text-Summary')     
         rouge = rouge.Rouge()
         bertscores = rouge.get_scores(hyps=gold_text, refs=bert_summary, avg=True)        
-        gpt2scores = rouge.get_scores(hyps=gold_text, refs=gpt2text_summary, avg=True)   
+        gpt2scores = rouge.get_scores(hyps=gold_text, refs=gpt2_summary, avg=True)   
 
         col1, col2, col3 = st.columns(3)
         
@@ -411,12 +407,12 @@ if user_message != '':
         bert_cands = [ cand for cand in bert_summary.split()]
         bert_beluscore = sentence_bleu(refs, bert_cands)
         #st.write(bert_beluscore)
-        gpt_cands  = [cand for cand in gpt2text_summary.split()]
+        gpt_cands  = [cand for cand in gpt2_summary.split()]
         gpt_beluscore = sentence_bleu(refs, gpt_cands)
         belu = [ bert_beluscore,gpt_beluscore]
 
         bert_metor = meteor([word_tokenize(gold_text)],word_tokenize(bert_summary))
-        gpt_metor = meteor([word_tokenize(gold_text)],word_tokenize(gpt2text_summary))
+        gpt_metor = meteor([word_tokenize(gold_text)],word_tokenize(gpt2_summary))
 
         metor= [ bert_metor,gpt_metor]
         radardf = pd.DataFrame()
@@ -438,12 +434,3 @@ if user_message != '':
         fig.update_layout(polar=dict(radialaxis=dict(visible=True,range=[0.0, radmaxval])),)
         st.write(fig)
         st.table(radardf)
-
-
-#     load = st.button('Search')
-#     with tab2:
-#         st.subheader("Multi Document Summarization")
-
-
-
-# # # #st.write('.....10')
