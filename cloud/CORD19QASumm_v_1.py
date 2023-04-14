@@ -212,8 +212,8 @@ def runSumm():
 
         tab1, tab2 = st.tabs(["Single Document Summarization", "Multi Document Summarization"])
 
-    `mystyle = '''
-        <style>
+        mystyle = '''
+        <style> 
             p {
                 text-align: justify;
             }
