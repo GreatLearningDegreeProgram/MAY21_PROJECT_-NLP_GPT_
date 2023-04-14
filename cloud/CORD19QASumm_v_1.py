@@ -61,7 +61,7 @@ warnings.filterwarnings('ignore')
 # NER = spacy.load("en_core_web_sm")
 
 st.set_page_config(layout="wide")
-imagename = Image.open('images/caronavirus banner.jpg')
+imagename = Image.open('cloud/images/caronavirus banner.jpg')
 st.image(imagename)
 
 import warnings
@@ -69,7 +69,7 @@ with warnings.catch_warnings():
     warnings.filterwarnings("ignore")
 
 rouge = rouge.Rouge()
-imagename2 = Image.open('images/Sidebar2.jpg')
+imagename2 = Image.open('cloud/images/Sidebar2.jpg')
 st.sidebar.image(imagename2)
 st.sidebar.title('Settings')
 modelSelected = st.sidebar.selectbox('Choose Reader Model',options=('deepset/roberta-base-squad2-covid','deepset/roberta-base-squad2','deepset/covid_bert_base'))
@@ -83,7 +83,7 @@ def runSumm():
        
     if user_message != '':
         print('inside user_meassage block')
-        imagename = Image.open('images/caronavirus banner.jpg')
+        imagename = Image.open('cloud/images/caronavirus banner.jpg')
         st.image(imagename)
         st.write(user_message)
         results = pipe.run(query=user_message,params={"Retriever": {"top_k": 10},"Reader": {"top_k": 5}})
@@ -212,13 +212,13 @@ def runSumm():
 
         tab1, tab2 = st.tabs(["Single Document Summarization", "Multi Document Summarization"])
 
-#     mystyle = '''
-#     <style>
-#         p {
-#             text-align: justify;
-#         }
-#     </style>
-#     '''
+    `mystyle = '''
+        <style>
+            p {
+                text-align: justify;
+            }
+        </style>
+        '''
         with tab1:
             print('inside tab1 .................')
             col1 , col2 , col3 = st.columns([1,1,1])
@@ -411,11 +411,11 @@ col_names = [
     'raw_bibliography'
 ]
 #data = pd.DataFrame(cleaned_files, columns=col_names)
-data = pd.read_csv('json2csv.csv')
+data = pd.read_csv('cloud/json2csv.csv')
 
 print('created json2csv ')
 
-text_file_path = 'text_file'
+text_file_path = 'cloud/text_file'
 abstract_file_path = 'abstract_file'
 bert_file_summary_path = 'summary_file/BERT'
 gpt_file_summary_path = 'summary_file/GPT'
